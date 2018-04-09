@@ -1,0 +1,31 @@
+{% load i18n sizeformat %}
+
+<div class="info detail">
+  <dl class="dl-horizontal">
+  <h4>{% trans "Pool Details" %}</h4>
+    <dt title="{% trans 'Name' %}">{% trans "Name" %}</dt>
+    <dd>{{ pool.name|default:"-" }}</dd>
+    <dt title="{% trans 'Auid' context 'ceph pool attribute' %}">{% trans "Auid" context 'ceph pool attribute' %}</dt>
+    <dd>{{ pool.auid }}</dd> 
+    <dt title="{% trans 'Ruleset Type' context 'ceph pool attribute' %}">{% trans "Ruleset Type" %}</dt>
+    <dd>{{ pool.type_label|default:"-" }}</dd>
+    <dt title="{% trans 'Size' %}">{% trans "Size" %}</dt>
+    <dd>{{ pool.size }}</dd> 
+    <dt title="{% trans 'MinSize' context 'ceph pool attribute' %}">{% trans "MinSize" context 'ceph pool attribute' %}</dt>
+    <dd>{{ pool.min_size }}</dd>  
+    <dt title="{% trans 'Crush_ruleset' context 'ceph pool attribute' %}">{% trans "Crush_ruleset" context 'ceph pool attribute' %}</dt>
+    <dd>{{ pool.crush_ruleset }}</dd> 
+    <dt title="{% trans 'Pg_num' context 'ceph pool attribute' %}">{% trans "Pg_num" context 'ceph pool attribute' %}</dt>
+    <dd>{{ pool.pg_num }}</dd>  
+    <dt title="{% trans 'Pg_placement_num' context 'ceph pool attribute' %}">{% trans "Pg_placement_num" context 'ceph pool attribute' %}</dt>
+    <dd>{{ pool.pg_placement_num }}</dd> 
+    <dt title="{% trans 'Quota_max_bytes' context 'ceph pool attribute' %}">{% trans "Quota_max_bytes" context 'ceph pool attribute' %}</dt>
+    <dd>{{ pool.quota_max_bytes }}</dd>
+    <dt title="{% trans 'Quota_max_objects' context 'ceph pool attribute' %}">{% trans "Quota_max_objects" context 'ceph pool attribute' %}</dt>
+    <dd>{{ pool.quota_max_objects }}</dd>
+    <dt title="{% trans 'Expected_num_objects' context 'ceph pool attribute' %}">{% trans "Expected_num_objects" context 'ceph pool attribute' %}</dt>
+    <dd>{{ pool.expected_num_objects }}</dd>
+    <dt title="{% trans 'Flags_names' context 'ceph pool attribute' %}">{% trans "Flags_names" context 'ceph pool attribute' %}</dt>
+    <dd>{{ pool.flags_names|default:"-" }}</dd>
+  </dl>
+</div>

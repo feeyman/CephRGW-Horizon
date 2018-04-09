@@ -1,0 +1,759 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load url from future %}
+{% block title %}{% trans "Overview" %}{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block css %}
+  {% include "_stylesheets.html" %}
+<style type="text/css">
+  ul{
+    list-style: none !important;
+    margin: 0 !important;
+  }
+  .spinner2 {
+    width: 40px;
+    height: 40px;
+    left: 50%;
+    top: 50%;
+    margin-top: -20px;
+    margin-left: 100px;
+    position: fixed;
+  }
+  .container1 > div, .container2 > div, .container3 > div {
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    position: absolute;
+    -webkit-animation: bouncedelay 1.2s infinite ease-in-out;
+    animation: bouncedelay 1.2s infinite ease-in-out;
+  }
+  .spinner2 .spinner-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  .container2 {
+    -webkit-transform: rotateZ(45deg);
+    transform: rotateZ(45deg);
+  }
+  .container3 {
+    -webkit-transform: rotateZ(90deg);
+    transform: rotateZ(90deg);
+  }
+  .circle1 { top: 0; left: 0; }
+  .circle2 { top: 0; right: 0; }
+  .circle3 { right: 0; bottom: 0; }
+  .circle4 { left: 0; bottom: 0; }
+  .container2 .circle1 {
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s;
+  }
+  .container3 .circle1 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+  }
+  .container1 .circle2 {
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+  }
+  .container2 .circle2 {
+    -webkit-animation-delay: -0.8s;
+    animation-delay: -0.8s;
+  }
+  .container3 .circle2 {
+    -webkit-animation-delay: -0.7s;
+    animation-delay: -0.7s;
+  }
+  .container1 .circle3 {
+    -webkit-animation-delay: -0.6s;
+    animation-delay: -0.6s;
+  }
+  .container2 .circle3 {
+    -webkit-animation-delay: -0.5s;
+    animation-delay: -0.5s;
+  }
+  .container3 .circle3 {
+    -webkit-animation-delay: -0.4s;
+    animation-delay: -0.4s;
+  }
+  .container1 .circle4 {
+    -webkit-animation-delay: -0.3s;
+    animation-delay: -0.3s;
+  }
+  .container2 .circle4 {
+    -webkit-animation-delay: -0.2s;
+    animation-delay: -0.2s;
+  }
+  .container3 .circle4 {
+    -webkit-animation-delay: -0.1s;
+    animation-delay: -0.1s;
+  }
+  @-webkit-keyframes bouncedelay {
+    0%, 80%, 100% { -webkit-transform: scale(0.0) }
+    40% { -webkit-transform: scale(1.0) }
+  }
+  @keyframes bouncedelay {
+    0%, 80%, 100% {
+      transform: scale(0.0);
+      -webkit-transform: scale(0.0);
+    } 40% {
+      transform: scale(1.0);
+      -webkit-transform: scale(1.0);
+    }
+  }
+  #loadings{
+    opacity: 0;
+    position: relative;
+    height: 100%;
+  }
+  .page-breadcrumb {
+    display: none;
+  }
+  .container{
+    position: relative;
+    width: 100%;
+    padding: 0 33px 15px 33px;
+  }
+  .overview_row1,.overview_row3,.overview_row4{
+    height: 200px;
+    background-color: white;
+    padding: 10px;
+    position: relative;
+  }
+  .overview_row2{
+    height: 100px;
+    background-color: white;
+    padding: 10px;
+  }
+  .row{
+    margin-bottom: 18px;
+  }
+  .loading .model-content,.modal-backdrop.in{
+    display: none;
+  }
+  .lump-bg {
+    position: relative;
+    background: #fff;
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  .lump-lg {
+    height: 200px;
+  }
+  .for-trans{
+    display: none;
+  }
+  .top_title{
+    font-size: 15px;
+    margin-top: -5px;
+  }
+  .overview_row2_link{
+    display: block;
+    height: 100%;
+    color: white;
+    text-decoration: none;
+  }
+  .overview_row2_link:active,.overview_row2_link:hover,.overview_row2_link:focus{
+    color: white;
+    text-decoration: none;
+  }
+  .headerRow{
+    border: none;
+  }
+  .headerRow .col-xs-12{
+    display: none;
+  }
+  .padding_lg{
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+  .padding_xd{
+    padding-right: 6px;
+    padding-left: 6px;
+  }
+  .padding_sm_l{
+    padding-left: 9px;
+  }
+  .padding_sm_r{
+    padding-right: 9px;
+  }
+  .padding_md_l{
+    padding-left: 12px;
+  }
+  .padding_md_r{
+    padding-right: 12px;
+  }
+  .overview_row1_2{
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+  }
+  .overview_row2_2{
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-bottom: 130px;
+    margin-top: 15px;
+  }
+  .padding_sm_r2{
+    padding-right: 15px;
+  }
+  .padding_sm_l2{
+    padding-left: 15px;
+    margin-top: 15px;
+  }
+  .padding_md_r2{
+    padding-right: 0px;
+    margin-bottom: 15px;
+  }
+  .padding_sm_init{
+    padding-left: 0px;
+  }
+  .poolStatus{
+    float: left;
+    width: 33%;
+    height: 60px;
+    text-align: center;
+    position: relative;
+    font-size: 14px;
+  }
+  .poolStatus p{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    margin: 0;
+  }
+  .poolStatus div{
+    margin-top: 0px;
+    font-size: 20px;
+  }
+  .images{
+    height: 60px;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    position: relative;
+  }
+  .hostStatus_cycle{
+    width: 50px;
+    height: 50px;
+    border: 2px rgb(168,104,209) solid;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 46px;
+    color: rgb(168,104,209);
+    position: relative;
+    left: 50%;
+    margin-left: -25px;
+    font-size: 25px !important;
+  }
+  .ceph_health_status{
+    height: 120px;
+    width: 100%;
+    position: absolute;
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .health_status_text{
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .status_warning{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    background-color: #FC4C50;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .disk_cycle{
+    position: relative;
+    width: 33%;
+    height: 150px;
+    float: left;
+  }
+  .disk_text div{
+    position: relative;
+    float: left;
+
+  }
+  .disk_text{
+    overflow: hidden;
+    margin-bottom: 5px;
+  }
+  .disk_square{
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 5px;
+  }
+  .disk_text span:nth-child(2){
+    display: inline-block;
+  }
+  #pg_cycle{
+    position: relative;
+    float: left;
+    width: 50%;
+    height: 100px;
+  }
+  .osd_num{
+    float: left;
+    width: 50%;
+    font-size: 12px;
+    text-align: center;
+    margin-left: -10px;
+  }
+  .monitor_status{
+    height: 150px;
+    width: 150px;
+    position: relative;
+    float: left;
+  }
+  .status_semicolon{
+    position: absolute;
+    left: 95px;
+    top: 113px;
+    font-size: 14px;
+  }
+  .status_warning{
+    display: none;
+  }
+  .mon_list{
+    font-size: 12px;
+  }
+  .disconnected{
+    position: absolute;
+    width: 400px;
+    left: 50%;
+    margin-left: -200px;
+    top: 100px;
+    background-color: rgba(0, 0, 0, .7);
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    font-size: 20px;
+    display: none;
+  }
+</style>
+{% endblock %}
+  {% block container-fluid %}
+    <div class="container">
+      <div id="loadings">
+        <div class="row row1">
+            <div class="col-md-3 overview_row1">
+              <div class="top_title">{% trans "Cluster Status" %}</div>
+              <div id="ceph_health_status" class="ceph_health_status"></div>
+              <div class="health_status_text">{% trans "Health Status" %}:
+                <span id="ceph_health_status_value"></span>
+              </div>
+                <div class="status_warning">{% trans "current warning num" %}:
+                  <span></span>
+                </div>
+            </div>
+            <div class="col-md-6 padding_lg" style="overflow: hidden;">
+              <div class="overview_row1">
+                <div class="top_title">{% trans "Disk Status" %}</div>
+                <div id="disk_cycle" class="disk_cycle"></div>
+                <div class="disk_cycle" style="width: 45%;margin-top: 10px;padding-left: 10px">
+                  <ul style="padding:10px">
+                    <li class="disk_text">
+                      <div>
+                        <span class="disk_square"  style="background-color: #68b828"></span>
+                        <span style="width: 60px">{% trans "used" context "ceph Disk Status" %}</span>
+                      </div>
+                      <div class="disk_used"></div>
+                    </li>
+                    <li class="disk_text">
+                      <div>
+                        <span class="disk_square"  style="background-color: #eee"></span>
+                        <span style="width: 60px">{% trans "free" context "ceph Disk Status" %}</span>
+                      </div>
+                      <div class="disk_free"></div>
+                    </li>
+                    <li class="disk_text">
+                      <div>
+                        <span class="disk_square"  style="background-color: #fcd76a"></span>
+                        <span style="width: 60px">{% trans "warning" context "ceph Disk Status" %}</span>
+                      </div>
+                      <div class="disk_near_full"></div>
+                    </li>
+                    <li class="disk_text">
+                      <div>
+                        <span class="disk_square" style="background-color: #d95484"></span>
+                        <span style="width: 60px">{% trans "critical" context "ceph Disk Status" %}</span>
+                      </div>
+                      <div class="disk_full"></div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="disk_cycle" style="width:20%;text-align: center;margin-top: 10px;padding-top: 20px">
+                  <h5 style="font-size: 35px;" id="disk_cycle_value"></h5>
+                  <div style="font-size: 15px;">{% trans "usage percentage" %}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 overview_row1">
+              <div class="top_title">{% trans "PG Status" %}</div>
+              <div id="pg_cycle"></div>
+              <div class="disk_cycle" style="width: 48%;height: 100px">
+                <ul style="padding:20px 0 20px 20px">
+                  <li class="disk_text" style="margin-top: 20px">
+                    <div>
+                        <span class="disk_square"  style="background-color: #68b828"></span>
+                        <span>{% trans "health" %}</span>
+                      </div>
+                  </li>
+                  <li>
+                    <div>
+                        <span class="disk_square"  style="background-color: #FC4C50"></span>
+                        <span>{% trans "unhealthy" %}</span>
+                      </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="poolStatus">
+                <div style="font-size: 20px;margin-top: 0" class="pg_total"></div>
+                <p>{% trans "PG count" %}</p>
+              </div>
+              <div style="float: left;width: 1px;height: 50px;background-color: #ccc;margin-top: 5px"></div>
+              <div class="poolStatus">
+                <div class="pg_health"></div>
+                <p>{% trans "health" %}</p>
+              </div>
+              <div class="poolStatus">
+                <div class="pg_unhealth"></div>
+                <p>{% trans "unhealthy" %}</p>
+              </div>
+            </div>
+        </div>
+        <div class="row row2">
+            <div class="col-md-3 overview_row2" style="background-color: #6a8ee3;">
+              <a href="{% url 'horizon:ceph:pools:index' %}" class="overview_row2_link">
+                <div class="top_title">{% trans "Pool Status" %}</div>
+                <div class="poolStatus">
+                  <div style="font-size: 20px;margin-top: 0" class="pool_total"></div>
+                  <p>{% trans "count" context "ceph pool count" %}</p>
+                </div>
+                <div style="float: left;width: 1px;height: 50px;background-color: #fff;margin-top: 5px"></div>
+                <div class="poolStatus">
+                  <div class="pool_clean"></div>
+                  <p>{% trans "clean" context "ceph pool status" %}</p>
+                </div>
+                <div class="poolStatus">
+                  <div class="pool_unclean"></div>
+                  <p>{% trans "unclean" context "ceph pool status" %}</p>
+                </div>
+              </a>
+            </div>
+            <div class="col-md-6 padding_lg">
+              <div class="overview_row2" style="background-color: #eee;padding: 0">
+                <div class="row">
+                  <div class="col-md-6 padding_sm_r">
+                    <div style="background-color: #72ca2c;" class="overview_row2">
+                      <a href="{% url 'horizon:ceph:images:index' %}" class="overview_row2_link">
+                        <div class="top_title">{% trans "Ceph Images" %}</div>
+                        <div class="images">
+                          <span style="font-size: 30px" class="roll_total"></span>
+                          <span>{% trans "count" context "ceph images count" %}</span>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-md-6 padding_sm_l">
+                    <div style="background-color: #F6A952;" class="overview_row2">
+                      <a href="#" class="overview_row2_link">
+                        <div class="top_title">{% trans "Snapshot" %}</div>
+                        <div class="images">
+                          <span style="font-size: 30px" class="snap_total"></span>
+                          <span>{% trans "count" context "ceph snapshot count" %}</span>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 overview_row2">
+              <a href="#" class="overview_row2_link" style="color:#666">
+                <div class="top_title">{% trans "Host Status" %}</div>
+                <div class="poolStatus" style="margin-top: 5px">
+                  <div class="hostStatus_cycle host_total"></div>
+                </div>
+                <div class="poolStatus">
+                  <div class="host_up"></div>
+                  <p>Up</p>
+                </div>
+                <div class="poolStatus">
+                  <div class="host_down"></div>
+                  <p>Down</p>
+                </div>
+              </a>
+            </div>
+        </div>
+        <div class="row row3">
+            <div class="col-md-4 padding_md_r" style="overflow: hidden;">
+              <div class="overview_row3" style="margin-left: -15px">
+                <div class="top_title">{% trans "Monitor Status" %}</div>
+                <div id="monitor_status" class="monitor_status"></div>
+                <div class="status_semicolon" id="mon_status_semicolon"></div>
+                <div style="margin-top: 20px">
+                  <div style="margin-bottom: 15px">
+                    <span>{% trans "leader monitor" context "ceph Monitor Status" %}:</span>
+                    <span class="mon_leader"></span>
+                  </div>
+                  <div style="overflow: hidden;">
+                    <span style="float: left;margin-right: 4px;">{% trans "monitor list" context "ceph Monitor Status" %}:</span>
+                    <div style="float: left">
+                      <span class="mon_list"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="status_warning mon_warning">
+                  <div>Warning: &nbsp;<span class="mon_down"></span> is down.</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 padding_xd">
+              <div class="overview_row3" style="overflow: hidden;">
+                <div class="top_title">{% trans "OSD Status" %}</div>
+                <div id="osd_status" class="monitor_status"></div>
+                <div class="status_semicolon" id="osd_status_semicolon"></div>
+                <div class="osd_num" style="margin-top: 15px;margin-bottom: 10px">
+                  <span style="float: left;width: 60%">
+                    <div style="font-size: 16px;" class="osd_up_in"></div>
+                    <div>up&in</div>
+                  </span>
+                  <span>
+                    <div style="font-size: 16px" class="osd_up_out"></div>
+                    <div>up&out</div>
+                  </span>
+                </div>
+                <div class="osd_num">
+                  <span style="float: left;width: 60%">
+                    <div style="font-size: 16px" class="osd_down_in"></div>
+                    <div>down&in</div>
+                  </span>
+                  <span>
+                    <div style="font-size: 16px" class="osd_down_out"></div>
+                    <div>down&out</div>
+                  </span>
+                </div>
+                <div class="status_warning osd_warning">
+                  <div>Warning: &nbsp;<span class="osd_warning_num">2</span>&nbsp;OSDs is abnormal.</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 padding_md_l" style="overflow: hidden;">
+              <div class="overview_row3" style="margin-right: -15px">
+                <div class="top_title">{% trans "MDS Status" %}</div>
+                <div id="mds_status" class="monitor_status"></div>
+                <div style="margin-top: 20px">
+                  <div style="margin-bottom: 15px">
+                    <span>{% trans "active" context "ceph MDS Status" %}:</span>
+                    <span class="mds_active"></span>
+                  </div>
+                  <div style="overflow: hidden;">
+                    <span style="float: left;margin-right: 4px;">{% trans "standby" context "ceph MDS Status" %}:</span>
+                    <div style="float: left">
+                      <span class="mds_standby"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="row row4">
+            <div class="col-md-6 padding_sm_r">
+              <div class="overview_row4" style="margin-left: -15px;padding: 0">
+                <div id="cluster_network_throught" class="lump-lg lump-bg" style="margin-bottom: 15px"></div>
+              </div>
+            </div>
+            <div class="col-md-6 padding_sm_l">
+              <div class="overview_row4" style="margin-right: -15px;padding: 0">
+                <div id="cluster_IOPS" class="lump-lg lump-bg" style="margin-bottom: 15px"></div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="disconnected">{% trans "Server network connection error." %}</div>
+      <div class="fakeloader"></div>
+    </div>
+    <div class="for-trans" id="cluster_network_throught_title">{% trans "Cluster Network Throughput" %}</div>
+    <div class="for-trans" id="cluster_IOPS_title">{% trans "Cluster IOPS" %}</div>
+    <div class="for-trans" id="health_status_good">{% trans "Tiptop" %}</div>
+    <div class="for-trans" id="health_status_warning">{% trans "Good" %}</div>
+    <div class="for-trans" id="health_status_abnormal">{% trans "Ordinary" %}</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}
+{% block js %}
+{% include "horizon/_scripts.html" %}
+<script type="text/javascript" src="{{STATIC_URL}}dashboard/js/echarts.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}dashboard/js/_color_set.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}dashboard/js/_cycleBold.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}dashboard/js/_cycleTitle.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}dashboard/js/_health_cycle.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}dashboard/js/_line_chartLines.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}dashboard/js/fakeLoader.js"></script>
+<script type="text/javascript">
+  // function func_host() {
+  //   $.getJSON('/dashboard/admin/host/',
+  //   function(host) {
+  //     func_host_element_count(host.users,host.desktops,host.projects,host.servers);
+  //   });
+  // }
+  // func_host();
+  // setInterval("func_host()", 10000);
+  //健康圈
+  health_cycles('ceph_health_status',"{% url 'horizon:ceph:overview:ceph_health_status' %}",'ceph_health_status_value',null,5000);
+  function pool_status(){
+    $.ajax({
+       url: "{% url 'horizon:ceph:overview:ceph_warning_num' %}",
+       type: 'GET',
+       dataType: 'json',
+       data: "{}",
+       success:function(data){
+           if(data>0){
+            $(".row1 .status_warning").css("display","block");
+            $(".row1 .status_warning span").html(data)
+           }else{
+            $(".row1 .status_warning").css("display","none");
+           }
+       },
+       error:function(data){
+
+       }
+  });
+  $.ajax({
+       url: "{% url 'horizon:ceph:overview:ceph_pool_status' %}",
+       type: 'GET',
+       dataType: 'json',
+       data: "{}",
+       success:function(data){
+           $(".disconnected").css("display","none");
+           var unclean = data.pool_total - data.pool_clean;
+           if(typeof(data.pool_total) == "undefined"){
+            $(".row2 .pool_total").html("--");
+            $(".row2 .pool_clean").html("--");
+            $(".row2 .pool_unclean").html("--");
+           }else{
+            $(".row2 .pool_total").html(data.pool_total);
+            $(".row2 .pool_clean").html(data.pool_clean);
+            $(".row2 .pool_unclean").html(unclean);
+           }
+           if(typeof(data.image_total) == "undefined"){
+            $(".row2 .roll_total").html("--");
+           }else{
+            $(".row2 .roll_total").html(data.image_total);
+           }
+           if(typeof(data.snap_total) == "undefined"){
+            $(".row2 .snap_total").html("--");
+           }else{
+            $(".row2 .snap_total").html(data.snap_total);
+           }
+       },
+       error:function(data){
+        $(".disconnected").css("display","block");
+       }
+  });
+  $.ajax({
+       url: "{% url 'horizon:ceph:overview:ceph_host_status' %}",
+       type: 'GET',
+       dataType: 'json',
+       data: "{}",
+       success:function(data){
+           $(".disconnected").css("display","none");
+           var down = data.host_total - data.up;
+           if(typeof(data.host_total) == "undefined"){
+            $(".row2 .host_total").html("?");
+            $(".row2 .host_up").html("--");
+            $(".row2 .host_down").html("--");
+           }else{
+            $(".row2 .host_total").html(data.host_total);
+            $(".row2 .host_up").html(data.up);
+            $(".row2 .host_down").html(down);
+           }
+       },
+       error:function(data){
+        $(".disconnected").css("display","block");
+       }
+  });
+  }
+  pool_status();
+  var ceph_overview_timer = setInterval(function(){
+    pool_status();
+  },10000)
+
+  //状态圈
+  cyclesTitleMon('monitor_status',"{% url 'horizon:ceph:overview:ceph_mon_status' %}",'mon_status_semicolon',"#F6A952");
+  cyclesTitleOsd('osd_status',"{% url 'horizon:ceph:overview:ceph_osd_status' %}",'osd_status_semicolon',"#1abc9c");
+  cyclesTitleMds('mds_status',"{% url 'horizon:ceph:overview:ceph_mds_status' %}");
+  cyclesBold('disk_cycle',"{% url 'horizon:ceph:overview:ceph_disk_status' %}",'disk_cycle_value');
+  cyclesBoldColor('pg_cycle',"{% url 'horizon:ceph:overview:ceph_pg_status' %}",null,"#68b828","#FC4C50");
+  // //折线图
+  line_chartLines_network('cluster_network_throught',"{% url 'horizon:ceph:overview:ceph_iops' %}",$("#cluster_network_throught_title").html(),"",gettext("MB/s"));
+  line_chartLines_IOPS('cluster_IOPS',"{% url 'horizon:ceph:overview:ceph_iops' %}",$("#cluster_IOPS_title").html(),"",gettext("Times"));
+
+  $(".project-menu-title").click(function(){
+    clearTimeout(ceph_overview_timer);
+    health_cycles_stop("ceph_health_status")
+    cyclesBold_stop("disk_cycle")
+    cyclesBoldColor_stop("pg_cycle")
+    cyclesTitle_stop("monitor_status")
+    cyclesTitle_stop("osd_status")
+    cyclesTitle_stop("mds_status")
+  })
+
+  //loading效果
+  $(".fakeloader").fakeLoader({
+              timeToHide:2000,
+              bgColor:"rgb(238,238,238)",
+              spinner:"spinner2",//1到7可供选择
+              fadeDiv:"loadings"
+          });
+  //保证loading居中
+  if($("#sidebar .contract").hasClass("open_sidebar")){
+    $(".spinner2").css("marginLeft","20px");
+  }
+  //调整布局
+  function containerResize(){
+    if($(window).width()<=991){
+      $(".row1 .padding_lg").addClass("overview_row1_2");
+      $(".row2 .padding_lg").addClass("overview_row2_2");
+      $(".row2 .padding_sm_r").addClass("padding_sm_r2");
+      $(".row2 .padding_sm_l").addClass("padding_sm_l2");
+      $(".row3 .padding_md_r").addClass("padding_md_r2");
+      $(".row3 .padding_md_l").addClass("padding_sm_init");
+      $(".row3 .padding_xd").addClass("overview_row1_2");
+      $(".row4 .padding_sm_l").addClass("padding_sm_init");
+      $(".row4 .padding_sm_r").addClass("padding_md_r2");
+    }else{
+      $(".row1 .padding_lg").removeClass("overview_row1_2");
+      $(".row2 .padding_lg").removeClass("overview_row2_2");
+      $(".row2 .padding_sm_r").removeClass("padding_sm_r2");
+      $(".row2 .padding_sm_l").removeClass("padding_sm_l2");
+      $(".row3 .padding_md_r").removeClass("padding_md_r2");
+      $(".row3 .padding_md_l").removeClass("padding_sm_init");
+      $(".row3 .padding_xd").removeClass("overview_row1_2");
+      $(".row4 .padding_sm_l").removeClass("padding_sm_init");
+      $(".row4 .padding_sm_r").removeClass("padding_md_r2");
+    }
+  }
+  containerResize();
+  $(window).resize(function(){
+    containerResize();
+  });
+</script>
+{% endblock %}

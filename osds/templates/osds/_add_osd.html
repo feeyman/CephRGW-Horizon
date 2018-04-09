@@ -1,0 +1,16 @@
+{% extends "horizon/common/_modal_form.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block form_id %}add_osd{% endblock %}
+{% block form_action %}{% url 'horizon:ceph:osds:add_osd' %}{% endblock %}
+<!-- {% block form_attrs %}enctype="multipart/form-data"{% endblock %} -->
+
+{% block modal-header %}{% trans "Add Osd" %}{% endblock %}
+
+{% block modal-body-right %}
+    <h4>{% trans "Description:" %}</h4>
+    <p>{% trans "Add a new osd." %}</p>
+{% endblock %}
+
+

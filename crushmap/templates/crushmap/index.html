@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Ceph Crushmap" %}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_domain_page_header.html" with title=page_title %}
+{% endblock page_header %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-sm-12">
+       <div class="info detail">
+         <h4>{% trans "Ceph Crushmap" %}</h4>
+       </div>
+       <div>
+        <pre>
+            {{ crushmap | default_if_none:"" | linebreaks }}
+        </pre>
+       </div>
+    </div>
+  </div>
+{% endblock %}
+

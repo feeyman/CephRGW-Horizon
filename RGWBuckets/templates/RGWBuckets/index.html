@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "RGWUsers" %}{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block css %}
+  {% include "_stylesheets.html" %}
+  <style type="text/css">
+    .rgw_contain{
+        overflow: hidden;
+        padding: 15px;
+    }
+    .rgw_contain .float_bg{
+        float: left;
+        height: 550px;
+        width: 40%;
+        padding: 15px;
+        text-align: center;
+    }
+    .rgw_contain .inputSearch{
+        border:1px #f8f8f8 solid;
+        margin-top: 80px;
+    }
+    .float_bg .content{
+        height: 300px;
+    }
+    .float_bg #list {
+            float: left;
+            width: 20%;
+            padding: 0;
+            margin-left: 30px;
+            position: relative;
+        }
+
+        .float_bg #list:before {
+            content: '用户列表';
+            position: absolute;
+            left: -2.8em;
+            font-size: 2em;
+            text-align: right;
+            top: 1.5em;
+            color: #ededed;
+            font-weight: bold;
+            font-family: 'Microsoft YaHei', 'Lantinghei SC', 'Open Sans', Arial, 'Hiragino Sans GB', 'STHeiti', 'WenQuanYi Micro Hei', 'SimSun', sans-serif;
+            transform: rotate(-90deg);
+        }
+
+        .float_bg #list li {
+            float: left;
+            clear: left;
+            width: 100%;
+            margin: 0.2em 0;
+            padding: 0.5em 0.8em;
+            list-style: none;
+            background-color: #f2f2f2;
+            border-left: 5px solid #003842;
+            cursor: pointer;
+            color: #333;
+            position: relative;
+            z-index: 2;
+            transition-property: margin, background-color, border-color;
+            transition-duration: .4s, .2s, .2s;
+            transition-timing-function: ease-in-out, ease, ease;
+        }
+
+        .float_bg #list li:hover {
+            background-color: #f9f9f9;
+            border-color: #00BDE8;
+        }
+        .hiding {
+            margin-left: -100% !important;
+            opacity: 0.5;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .content .left{
+            margin-bottom: 10px;
+            width: 100%;
+            border-bottom: 1px #ddd solid;
+        }
+  </style>
+  
+{% endblock %}
+
+{% block container-fluid %}
+ 
+
+
+
+    <div class="rgw_contain">
+        <div class="float_bg">
+            <h4 style="text-align: center">桶Buckets搜索框过滤筛选</h4>
+            <span>搜索</span>
+            <input type="text" name="" class="inputSearch">
+            <span class="list-count"></span>
+            <div style="margin: 50px 100px;overflow: hidden;">
+               <ul id="list">
+                <li class="in">zhoulin</li>
+                <li class="in">admin</li>
+                <li class="in">jimin</li>
+                <li class="in">astute</li>
+                <li class="in">yunchao</li>
+            </ul> 
+            </div>
+            
+        </div>
+       <div class="float_bg" style="width: 60%;box-shadow: 0 0 5px #ccc;border: 2px #ccc solid;border-radius: 20px;background-color: #fff;">
+            <h4>该用户所建桶</h4>
+            <div class="content">    
+                <san>Buckets list of</sapn>
+                <span class="name"></span>
+                     <p>{{ buckets }}</p> 
+            <div class="content">
+            
+            <div align="left" class="left">
+                <san>1 jimin-test</sapn>
+            </div>   
+             <div align="left" class="left">
+                <san>2 zhoulin</sapn>
+            </div>  
+             <div align="left" class="left">     
+                <san>3</sapn>
+            </div>
+             <div align="left" class="left">     
+                <san>4</sapn>
+            </div>
+            <div align="left" class="left">     
+                <san>5</sapn>
+            </div>
+            <div align="left" class="left">     
+                <san>6</sapn>
+            </div>
+            <div align="left" class="left">     
+                <san>7</sapn>
+            </div>
+
+            <div align="left" class="left">
+                <san>8</sapn>
+            </div>  
+            <div align="left" class="left"> 
+                 <san>9</sapn>
+            </div>
+             <div align="left" class="left">
+                <san>10</sapn>
+            </div>
+
+          </div>
+        </div>
+   </div> 
+
+{% endblock %}
+
+{% block js %}
+{% include "horizon/_scripts.html" %}
+<script type="text/javascript">
+     $(".inputSearch").keyup(function () {
+            //$(this).addClass('hidden');
+
+            var searchTerm = $(".inputSearch").val();
+            var listItem = $('#list').children('li');
+
+
+            var searchSplit = searchTerm.replace(/ /g, "'):containsi('")
+
+            //extends :contains to be case insensitive
+            $.extend($.expr[':'], {
+                'containsi': function (elem, i, match, array) {
+                    return (elem.textContent || elem.innerText || '').toLowerCase()
+                        .indexOf((match[3] || "").toLowerCase()) >= 0;
+                }
+            });
+
+
+            $("#list li").not(":containsi('" + searchSplit + "')").each(function (e) {
+                $(this).addClass('hiding out').removeClass('in');
+                setTimeout(function () {
+                    $('.out').addClass('hidden');
+                }, 300);
+            });
+
+            $("#list li:containsi('" + searchSplit + "')").each(function (e) {
+                $(this).removeClass('hidden out').addClass('in');
+                setTimeout(function () {
+                    $('.in').removeClass('hiding');
+                }, 1);
+            });
+
+
+            var jobCount = $('#list .in').length;
+            $('.list-count').text('共 ' + jobCount + ' 条');
+
+            //shows empty state text when no jobs found
+            if (jobCount == '0') {
+                $('#list').addClass('empty');
+            }
+            else {
+                $('#list').removeClass('empty');
+            }
+
+        });
+    $('#list li').click(function(){
+        $('.name').html($(this).html())
+    })
+</script>
+{% endblock %}
